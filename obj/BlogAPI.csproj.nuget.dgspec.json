@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ahmed\\Desktop\\BlogApi2\\BlogAPI.csproj": {}
+    "C:\\Users\\Ahmed\\Desktop\\Projects\\BlogApi2\\BlogAPI.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ahmed\\Desktop\\BlogApi2\\BlogAPI.csproj": {
+    "C:\\Users\\Ahmed\\Desktop\\Projects\\BlogApi2\\BlogAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ahmed\\Desktop\\BlogApi2\\BlogAPI.csproj",
+        "projectUniqueName": "C:\\Users\\Ahmed\\Desktop\\Projects\\BlogApi2\\BlogAPI.csproj",
         "projectName": "BlogAPI",
-        "projectPath": "C:\\Users\\Ahmed\\Desktop\\BlogApi2\\BlogAPI.csproj",
+        "projectPath": "C:\\Users\\Ahmed\\Desktop\\Projects\\BlogApi2\\BlogAPI.csproj",
         "packagesPath": "C:\\Users\\Ahmed\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ahmed\\Desktop\\BlogApi2\\obj\\",
+        "outputPath": "C:\\Users\\Ahmed\\Desktop\\Projects\\BlogApi2\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Ahmed\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -71,6 +71,18 @@
             "Microsoft.IdentityModel.Tokens": {
               "target": "Package",
               "version": "[7.6.0, )"
+            },
+            "Swashbuckle.AspNetCore.Swagger": {
+              "target": "Package",
+              "version": "[6.7.3, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerGen": {
+              "target": "Package",
+              "version": "[6.7.3, )"
+            },
+            "Swashbuckle.AspNetCore.SwaggerUI": {
+              "target": "Package",
+              "version": "[6.7.3, )"
             },
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",

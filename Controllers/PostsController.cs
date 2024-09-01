@@ -31,28 +31,56 @@ namespace BlogAPI.Controllers
 
             return Ok(Res);
         }
-        [Authorize]
-        [HttpPost]
-        public async Task<IActionResult> CreatePost([FromBody] PostDto_Req userData){
 
-                
-                Guid retId = Guid.NewGuid();
-                Post createdPost = new Post (){
-                    Id = retId,
-                    Title = userData.Title,
-                    Content = userData.Content,
-                    UserId = Guid.Parse(_userManeger.GeUserId())
-                };
-                await _context.Posts.AddAsync(createdPost);
-                await _context.SaveChangesAsync();
-                return Ok(retId.ToString());
+
+        [Authorize]
+        [HttpPost("AddPost/{blogId:guid}")]
+        public async Task<IActionResult> CreatePost([FromRoute] Guid blogId, [FromBody] PostDto_Req userData)
+        {
+
+            if (!await _context.Blogs.AnyAsync(b => b.Id == blogId)) return BadRequest("no blog with that id");
+            Guid retId = Guid.NewGuid();
+            Post createdPost = new Post()
+            {
+                Id = retId,
+                Title = userData.Title,
+                Content = userData.Content,
+                BlogId = blogId,
+                UserId = Guid.Parse(_userManeger.GeUserId()),
+                AddedOn = DateTime.UtcNow
+            };
+            await _context.Posts.AddAsync(createdPost);
+            await _context.SaveChangesAsync();
+            return Ok(retId.ToString());
 
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {   
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAll([FromQuery] int positoin)
+        {
+          
+            var Posts = await _context.Posts
+                                .OrderByDescending(p => p.AddedOn)
+                                .Skip(positoin*10)
+                                .Take(10)
+                                .ToListAsync();
 
-            return Ok( await _context.Posts.ToListAsync());
+
+            return Ok(Posts);
+        }
+
+        [HttpGet("Blog/{BlogId:guid}")]
+        public async Task<IActionResult> GetAllInBlog([FromRoute] Guid BlogId,[FromQuery] int positoin)
+        {
+
+            var Posts = await _context.Posts
+                                .OrderByDescending(p => p.AddedOn)
+                                .Skip(positoin * 10)
+                                .Take(10)
+                                .Where(p => p.BlogId == BlogId)
+                                .ToListAsync();
+
+
+            return Ok(Posts);
         }
 
         [Authorize]

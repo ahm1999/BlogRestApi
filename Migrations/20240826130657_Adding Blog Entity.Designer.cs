@@ -4,6 +4,7 @@ using BlogAPI.utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240826130657_Adding Blog Entity")]
+    partial class AddingBlogEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -75,10 +78,7 @@ namespace BlogAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("AddedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("BlogId")
+                    b.Property<Guid?>("BlogId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
@@ -144,19 +144,15 @@ namespace BlogAPI.Migrations
 
             modelBuilder.Entity("BlogAPI.Models.Post", b =>
                 {
-                    b.HasOne("BlogAPI.Models.Blog", "ParentBlog")
+                    b.HasOne("BlogAPI.Models.Blog", null)
                         .WithMany("Posts")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BlogId");
 
                     b.HasOne("BlogAPI.Models.User", "User")
                         .WithMany("posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ParentBlog");
 
                     b.Navigation("User");
                 });

@@ -11,6 +11,8 @@ namespace BlogAPI.Models
         public string Role  {get ; set ;}
 
         public ICollection <Post> posts {get ;set;}
+
+        public ICollection<Blog> Blogs { get; set; }
     }
 
 }

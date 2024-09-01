@@ -10,10 +10,17 @@ namespace BlogAPI.Models
         
         public String Content { get; set; } = String.Empty;
 
+        public DateTime AddedOn { get; set; }
+
         [ForeignKey("User")]
         public Guid UserId { get; set; } 
 
         public User User { get; set; }
+
+        [ForeignKey(nameof(Blog))]
+        public Guid BlogId { get; set; }
+
+        public Blog ParentBlog { get; set; }  
 
         public ICollection<Comment> Comments {get ; set ; }
 
