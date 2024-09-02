@@ -32,7 +32,10 @@ namespace BlogAPI.Controllers
                 Id = BlogId,
                 Desciption = userData.Desciption,
                 title = userData.title,
-                CreatorId = Guid.Parse(_userManeger.GeUserId())
+                CreatorId = Guid.Parse(_userManeger.GeUserId()),
+                Personal = userData.Personal,
+                CreatedOn = DateTime.UtcNow
+
             };
             await _context.Blogs.AddAsync(blog);
             await _context.SaveChangesAsync();
@@ -57,6 +60,28 @@ namespace BlogAPI.Controllers
 
 
         }
+
+        [HttpGet("All")]
+        public async Task<IActionResult> GetAllBlogs([FromQuery] int positoin) {
+            var Blogs = await _context.Blogs
+                               .OrderByDescending(p => p.CreatedOn)
+                               .Skip(positoin * 10)
+                               .Take(10)
+                               .ToListAsync();
+            return Ok(Blogs);
+        }
+
+
+        [HttpGet("Count")]
+        public async Task<IActionResult> GetAllBlogCount() {
+            int count = await _context.Blogs.CountAsync();
+
+            return Ok(new {Count = count });
+        
+        }
+
+
+
 
     }
 }

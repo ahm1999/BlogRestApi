@@ -27,7 +27,7 @@ namespace BlogAPI.Controllers
         }
         
         [Authorize]
-        [HttpPost("{PostId:Guid}")]
+        [HttpPost("add/{PostId:Guid}")]
         public async Task<IActionResult> Comment([FromRoute] Guid PostId,[FromBody] CommentDTO userData ){
 
             if (!await  _context.Posts.AnyAsync(p => p.Id == PostId )){

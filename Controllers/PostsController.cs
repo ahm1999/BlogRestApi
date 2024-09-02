@@ -37,8 +37,14 @@ namespace BlogAPI.Controllers
         [HttpPost("AddPost/{blogId:guid}")]
         public async Task<IActionResult> CreatePost([FromRoute] Guid blogId, [FromBody] PostDto_Req userData)
         {
+            Guid userId = Guid.Parse(_userManeger.GeUserId());
+        
+            var blog = await _context.Blogs.FirstOrDefaultAsync(b => b.Id == blogId);
 
-            if (!await _context.Blogs.AnyAsync(b => b.Id == blogId)) return BadRequest("no blog with that id");
+            if(blog == null ) return BadRequest("no blog with that id");
+
+            if (blog.Personal && userId != blog.CreatorId) return Unauthorized("Personal Blog");
+
             Guid retId = Guid.NewGuid();
             Post createdPost = new Post()
             {
@@ -46,7 +52,7 @@ namespace BlogAPI.Controllers
                 Title = userData.Title,
                 Content = userData.Content,
                 BlogId = blogId,
-                UserId = Guid.Parse(_userManeger.GeUserId()),
+                UserId = userId,
                 AddedOn = DateTime.UtcNow
             };
             await _context.Posts.AddAsync(createdPost);
@@ -54,6 +60,8 @@ namespace BlogAPI.Controllers
             return Ok(retId.ToString());
 
         }
+
+
         [HttpGet("All")]
         public async Task<IActionResult> GetAll([FromQuery] int positoin)
         {
@@ -68,10 +76,26 @@ namespace BlogAPI.Controllers
             return Ok(Posts);
         }
 
+        [HttpGet("Count")]
+        public async Task<IActionResult> GetAllPostCount() {
+            int count = await _context.Posts.CountAsync();
+
+            return Ok( new { Count = count });
+        
+        }
+
+        [HttpGet("Count/{BlogId:guid}")]
+
+        public async Task<IActionResult> GetPostsCountInBlog([FromRoute] Guid BlogId) {
+            int count = await _context.Posts.CountAsync(p => p.BlogId == BlogId);
+
+            return Ok(new {Count = count});
+        }
+
         [HttpGet("Blog/{BlogId:guid}")]
         public async Task<IActionResult> GetAllInBlog([FromRoute] Guid BlogId,[FromQuery] int positoin)
         {
-
+            
             var Posts = await _context.Posts
                                 .OrderByDescending(p => p.AddedOn)
                                 .Skip(positoin * 10)

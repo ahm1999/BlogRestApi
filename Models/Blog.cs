@@ -11,10 +11,14 @@ namespace BlogAPI.Models
 
         public string Desciption { get; set; }
 
+        public bool Personal { get; set; }
+
         [ForeignKey(nameof(User))]
         public Guid CreatorId { get; set; }
 
         public User Creator { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public  ICollection<Post> Posts { get; set; }
     }

@@ -9,5 +9,6 @@ namespace BlogAPI.Dtos
         [Required(ErrorMessage = "Description is required")]
         [MinLength(100)]
         public string Desciption { get; set; }
+        public bool Personal { get; set; }
     }
 }
