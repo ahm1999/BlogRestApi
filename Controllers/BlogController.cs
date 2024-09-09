@@ -39,7 +39,7 @@ namespace BlogAPI.Controllers
             };
             await _context.Blogs.AddAsync(blog);
             await _context.SaveChangesAsync();
-            return Ok($"Blog with the Id {BlogId.ToString()}");
+            return Ok(new {status = "success" ,BlogId=BlogId.ToString()  });
           }
 
         
@@ -63,12 +63,12 @@ namespace BlogAPI.Controllers
 
         [HttpGet("All")]
         public async Task<IActionResult> GetAllBlogs([FromQuery] int positoin) {
-            var Blogs = await _context.Blogs
+            var _Blogs = await _context.Blogs
                                .OrderByDescending(p => p.CreatedOn)
                                .Skip(positoin * 10)
                                .Take(10)
                                .ToListAsync();
-            return Ok(Blogs);
+            return Ok(new { status= "success", Blogs =  _Blogs});
         }
 
 
