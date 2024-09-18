@@ -2,8 +2,10 @@
 using BlogAPI.Models;
 using BlogAPI.Services;
 using BlogAPI.utils;
+using BlogApi2.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -80,7 +82,19 @@ namespace BlogAPI.Controllers
         
         }
 
+        [HttpGet("data/{blogId:guid}")]
+        public async Task<IActionResult> GetblogData([FromRoute]Guid blogId ){
 
+            var _blog = await _context.Blogs.Include(b => b.Creator).FirstOrDefaultAsync(b => b.Id == blogId);
+
+            return Ok(new BlogResponseDTO {
+                Id = _blog.Id,
+                BlogDesctiption  =_blog.Desciption,
+                BLogTitle = _blog.title,
+                Personal = _blog.Personal,
+                CreatorName = _blog.Creator.Name
+            });
+        }
 
 
     }
